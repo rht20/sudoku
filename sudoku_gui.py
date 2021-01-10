@@ -1,7 +1,7 @@
 import pygame
 from time import time
 from copy import deepcopy
-from sudoku_logic import generate_puzzle, is_board_full, is_valid, get_conflicted_cells
+from sudoku_logic import generate_puzzle, is_board_full, is_valid_move, get_conflicted_cells
 
 pygame.init()
 
@@ -16,7 +16,7 @@ def initialize_board():
 def setup_display():
     global display, display_height, display_width, display_color
     display_height = 550
-    display_width = 800
+    display_width = 770
     display_color = (60, 60, 60)
 
     display = pygame.display.set_mode((display_width, display_height))
@@ -27,14 +27,6 @@ def setup_display():
 
 
 def setup_variables():
-    global sleep_time
-    sleep_time = 100
-
-    global start_time, finish_time, time_paused
-    start_time = None
-    finish_time = None
-    time_paused = 0
-
     global font, btn_font
     font = pygame.font.SysFont('dejavuserif', 20)
     btn_font = pygame.font.SysFont('dejavuserif', 14)
@@ -47,6 +39,14 @@ def setup_variables():
     blue = (201, 233, 246)
     btn_bg_color = (70, 70, 70)
     btn_hover_bg_color = (80, 80, 80)
+
+    global sleep_time
+    sleep_time = 100
+
+    global start_time, finish_time, time_paused
+    start_time = None
+    finish_time = None
+    time_paused = 0
 
     global margin_top, margin_left
     margin_top = 50
@@ -235,11 +235,7 @@ def draw_buttons_and_handle_click():
                 if i == 2:
                     new_puzzle()
                 if i == 3:
-                    initialize_timer()
-                    solve_sudoku((0, 0))
-                    global finish_time
-                    finish_time = time()
-
+                    handle_solve_sudoku_call()
         else:
             draw_button(btn_coordinates, btn_bg_color, btn_text_list[i])
 
@@ -318,8 +314,6 @@ def new_puzzle():
 
 
 def solve_sudoku(cell):
-    show_timer()
-
     row = cell[0]
     col = cell[1]
 
@@ -336,12 +330,10 @@ def solve_sudoku(cell):
     # pygame.time.wait(sleep_time)
 
     for i in range(1, 10):
-        show_timer()
-
         change_cell_value(cell, i)
         # pygame.time.wait(sleep_time)
 
-        if is_valid(board, n, cell, i) == True:
+        if is_valid_move(board, n, cell, i) == True:
             if solve_sudoku((row, col + 1)) == True:
                 return True
             change_selected_cell(cell)
@@ -350,6 +342,33 @@ def solve_sudoku(cell):
     # pygame.time.wait(sleep_time)
 
     return False
+
+
+def handle_solve_sudoku_call():
+    global board
+    board = deepcopy(initial_board)
+
+    global conflicted_cells, conflict_count
+    conflicted_cells = {}
+    conflict_count = {}
+
+    draw_grid()
+    draw_grid_borders()
+
+    initialize_timer()
+    show_timer()
+
+    solve_sudoku((0, 0))
+
+    global start_time, finish_time, time_paused
+    start_time = finish_time = time_paused = 0
+
+    global current_selected_cell
+    cell = current_selected_cell
+    current_selected_cell = None
+
+    draw_cell(cell, get_bg_color(cell))
+    add_text(cell, board[cell[0]][cell[1]], get_font_color(cell))
 
 
 def initialize_timer():
@@ -605,8 +624,8 @@ def main():
     initialize_board()
     setup_display()
     setup_variables()
-    draw_grid_borders()
     draw_grid()
+    draw_grid_borders()
     draw_buttons_and_handle_click()
     game_loop()
 
