@@ -8,7 +8,7 @@ It's a desktop sudoku game, where a user can play the game as well as visualize 
 
 To run this game from command prompt:  
 ```
-$ python3 sudoku_gui.py
+$ python3 sudoku.py
 ```
 To install pygame:
 ```
