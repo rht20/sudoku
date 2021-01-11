@@ -649,6 +649,10 @@ def show_menu():
             draw_button(btn_coordinates, btn_bg_color, btn_text)
 
 
+def quit_game():
+    pygame.quit()
+
+
 def main():
     initialize_board()
     setup_display()
@@ -662,7 +666,3 @@ def main():
         draw_grid_borders()
         draw_buttons_and_handle_click()
         game_loop()
-
-
-main()
-pygame.quit()
