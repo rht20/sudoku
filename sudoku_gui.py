@@ -620,14 +620,48 @@ def game_loop():
         handle_events()
 
 
+def show_menu():
+    image = pygame.image.load('instructions.png')
+    display.blit(image, (0, 10))
+    pygame.display.update()
+
+    left_x = int((display_width - btn_width) // 2)
+    top_y = display_height - btn_margin_bottom - btn_height
+    right_x = left_x + btn_width
+    bottom_y = top_y + btn_height
+    btn_coordinates = [(left_x, top_y), (right_x, bottom_y)]
+
+    btn_text = 'Play'
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_click = pygame.mouse.get_pressed()
+
+        if is_on_button(btn_coordinates, mouse_pos):
+            draw_button(btn_coordinates, btn_hover_bg_color, btn_text)
+            if mouse_click[0]:
+                return True
+        else:
+            draw_button(btn_coordinates, btn_bg_color, btn_text)
+
+
 def main():
     initialize_board()
     setup_display()
     setup_variables()
-    draw_grid()
-    draw_grid_borders()
-    draw_buttons_and_handle_click()
-    game_loop()
+
+    start_game = show_menu()
+
+    if start_game:
+        display.fill(display_color)
+        draw_grid()
+        draw_grid_borders()
+        draw_buttons_and_handle_click()
+        game_loop()
 
 
 main()
