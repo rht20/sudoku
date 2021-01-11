@@ -5,3 +5,12 @@
 </p>
 
 It's a desktop sudoku game, where a user can play the game as well as visualize the solution of the game using backtracking.
+
+To run this game from command prompt:  
+```
+$ python3 sudoku_gui.py
+```
+To install pygame:
+```
+$ pip install pygame
+```
