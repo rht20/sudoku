@@ -4,7 +4,7 @@
 	<img src="https://github.com/rht20/sudoku/blob/main/sudoku.gif" width="62%" height="460" />
 </p>
 
-It's a desktop sudoku game, where a user can play the game as well as visualize the solution of the game using backtracking.
+It's a desktop sudoku game built using pygame, where a user can play the game as well as visualize the solution of the game using backtracking.
 
 To run this game from command prompt:  
 ```
